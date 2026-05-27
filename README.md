@@ -1,1 +1,1 @@
-Prezentare video: https://jumpshare.com/s/e47fddjUBM68LMGNJ6xW
+Prezentare video: https://youtu.be/GEH7QQEq6yg
