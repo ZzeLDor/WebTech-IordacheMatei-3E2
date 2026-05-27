@@ -1,0 +1,301 @@
+================================================================================
+CODURI SURSA COMPLETE PENTRU DIAGRAME (MERMAID & PLANTUML)
+Aplicatia: KIM Web Manager
+================================================================================
+
+Acest fisier contine codul brut pentru randarea diagramelor in:
+1. Mermaid Live Editor (https://mermaid.live/)
+2. PlantUML Online Server (http://www.plantuml.com/plantuml)
+3. Draw.io / Diagrams.net (Insert -> Advanced -> Mermaid/PlantUML)
+
+--------------------------------------------------------------------------------
+1. NIVELUL 1: DIAGRAMA DE CONTEXT (SYSTEM CONTEXT)
+--------------------------------------------------------------------------------
+
+[MERMAID.JS CODE]
+graph TD
+    classDef user fill:#2563eb,stroke:#1d4ed8,color:#fff,stroke-width:2px;
+    classDef system fill:#059669,stroke:#047857,color:#fff,stroke-width:2px;
+    classDef external fill:#4b5563,stroke:#374151,color:#fff,stroke-width:2px;
+
+    U1["Membru (Utilizator)"]:::user
+    U2["Antrenor / Kinetoterapeut"]:::user
+    U3["Administrator"]:::user
+    KIM["KIM Web Manager (Aplicatia Web)"]:::system
+    SMTP["Server SMTP (E-mail Extern)"]:::external
+
+    U1 -->|"Rezerva sedinte, cere antrenamente"| KIM
+    U2 -->|"Aproba cereri, orar, vizualizare sedinte"| KIM
+    U3 -->|"Administrare resurse, staff, statistici"| KIM
+    KIM -->|"Notificari & parole temporare"| SMTP
+
+
+[PLANTUML CODE]
+@startuml System_Context
+!theme flat
+skinparam actorStyle awesome
+
+actor "Membru (Utilizator)" as Membru
+actor "Antrenor / Kineto" as Staff
+actor "Administrator" as Admin
+rectangle "KIM Web Manager\n[Sistem Principal]" as KIM #059669;text:white
+node "Server SMTP\n[Sistem Extern]" as SMTP #4b5563;text:white
+
+Membru --> KIM : "Rezerva sedinte, cere antrenamente"
+Staff --> KIM : "Aproba cereri, gestioneaza orarul"
+Admin --> KIM : "Administrare resurse, roluri, vizualizare statistici"
+KIM --> SMTP : "Notifica utilizatorii pe e-mail"
+@enduml
+
+
+--------------------------------------------------------------------------------
+2. NIVELUL 2: DIAGRAMA DE CONTAINERE (CONTAINERS)
+--------------------------------------------------------------------------------
+
+[MERMAID.JS CODE]
+graph LR
+    classDef container fill:#7c3aed,stroke:#5b21b6,color:#fff,stroke-width:2px;
+    classDef db fill:#d97706,stroke:#b45309,color:#fff,stroke-width:2px;
+
+    subgraph Browser["Client (Web Browser)"]
+        FE["Interfata Utilizator (HTML5/CSS3/Vanilla JS)<br>[AJAX Fetch API]"]:::container
+    end
+
+    subgraph Server["Server Web / Host"]
+        BE["API Backend (PHP Core / MVC)<br>[Rute REST, Controlere, Mailer]"]:::container
+        DB[("Baza de date (SQLite)<br>[kim.sqlite]")]:::db
+    end
+
+    FE -->|"Cereri HTTP/JSON asincrone"| BE
+    BE -->|"Interogari SQL (PDO)"| DB
+
+
+[PLANTUML CODE]
+@startuml Containers
+!theme flat
+
+package "Client (Web Browser)" {
+    [Interfata Utilizator\n(HTML5 / CSS3 / Vanilla JS)] as FE #7c3aed;text:white
+}
+
+package "Server Web / Host" {
+    [API Backend\n(PHP Core / MVC)] as BE #059669;text:white
+    database "Baza de Date\n(SQLite File)" as DB #d97706;text:white
+}
+
+FE --> BE : "Cereri asincrone Fetch (JSON)"
+BE --> DB : "Instanta PDO / Interogari SQL"
+@enduml
+
+
+--------------------------------------------------------------------------------
+3. NIVELUL 3: DIAGRAMA DE COMPONENTE (COMPONENTS)
+--------------------------------------------------------------------------------
+
+[MERMAID.JS CODE]
+graph TD
+    classDef core fill:#db2777,stroke:#be185d,color:#fff,stroke-width:2px;
+    classDef controller fill:#2563eb,stroke:#1d4ed8,color:#fff,stroke-width:2px;
+
+    R["Router.php (Core Router)"]:::core
+    DB["Database.php (SQLite Connection)"]:::core
+    M["Mailer.php (SMTP Mailer)"]:::core
+
+    subgraph Controllers["Controlere MVC"]
+        AuthC["AuthController"]:::controller
+        UserC["UserController"]:::controller
+        SessC["SessionController"]:::controller
+        StatC["StatsController"]:::controller
+        SubC["SubscriptionController"]:::controller
+        ReqC["PrivateRequestController"]:::controller
+    end
+
+    R --> AuthC & UserC & SessC & StatC & SubC & ReqC
+    AuthC & UserC & SessC & StatC & SubC & ReqC --> DB
+    AuthC & ReqC & SessC --> M
+
+
+[PLANTUML CODE]
+@startuml Components
+!theme flat
+
+node "Infrastructura Core PHP" {
+    [Router.php] as Router #db2777;text:white
+    [Database.php] as DB #db2777;text:white
+    [Mailer.php] as Mailer #db2777;text:white
+}
+
+package "Controlere MVC (Controllers/)" {
+    [AuthController] as AuthC #2563eb;text:white
+    [UserController] as UserC #2563eb;text:white
+    [SessionController] as SessC #2563eb;text:white
+    [StatsController] as StatC #2563eb;text:white
+    [SubscriptionController] as SubC #2563eb;text:white
+    [PrivateRequestController] as ReqC #2563eb;text:white
+}
+
+Router --> AuthC
+Router --> UserC
+Router --> SessC
+Router --> StatC
+Router --> SubC
+Router --> ReqC
+
+AuthC --> DB
+UserC --> DB
+SessC --> DB
+StatC --> DB
+SubC --> DB
+ReqC --> DB
+
+AuthC --> Mailer
+ReqC --> Mailer
+SessC --> Mailer
+@enduml
+
+
+--------------------------------------------------------------------------------
+4. DIAGRAMA RELATIONALA DE DATE (ER DIAGRAM)
+--------------------------------------------------------------------------------
+
+[MERMAID.JS CODE]
+erDiagram
+    USERS {
+        int id PK
+        string name
+        string email UK
+        string password_hash
+        string role
+        string specialization
+        datetime created_at
+    }
+    SUBSCRIPTIONS {
+        int id PK
+        int user_id FK
+        string type
+        string status
+        date end_date
+    }
+    RESOURCES {
+        int id PK
+        string name
+        string type
+        int capacity
+    }
+    SESSIONS {
+        int id PK
+        int trainer_id FK
+        int resource_id FK
+        string name
+        date date
+        string start_time
+        string end_time
+    }
+    BOOKINGS {
+        int id PK
+        int session_id FK
+        int user_id FK
+        datetime created_at
+    }
+    TRAINER_SCHEDULES {
+        int id PK
+        int trainer_id FK
+        int day_of_week
+        string start_time
+        string end_time
+    }
+    EQUIPMENT {
+        int id PK
+        string name
+        string serial_number UK
+        string status
+        int resource_id FK
+    }
+
+    USERS ||--o| SUBSCRIPTIONS : "has"
+    USERS ||--o{ SESSIONS : "conducts"
+    USERS ||--o{ BOOKINGS : "makes"
+    USERS ||--o{ TRAINER_SCHEDULES : "defines"
+    RESOURCES ||--o{ SESSIONS : "hosts"
+    SESSIONS ||--o{ BOOKINGS : "contains"
+    RESOURCES ||--o{ EQUIPMENT : "stores"
+
+
+[PLANTUML CODE]
+@startuml ERD
+!theme flat
+hide circle
+
+entity "users" {
+    * id : INTEGER [PK]
+    --
+    * name : TEXT
+    * email : TEXT [Unique]
+    * password_hash : TEXT
+    * role : TEXT
+    specialization : TEXT
+    created_at : DATETIME
+}
+
+entity "subscriptions" {
+    * id : INTEGER [PK]
+    --
+    * user_id : INTEGER [FK -> users]
+    * type : TEXT
+    * status : TEXT
+    * end_date : DATE
+}
+
+entity "resources" {
+    * id : INTEGER [PK]
+    --
+    * name : TEXT
+    * type : TEXT
+    * capacity : INTEGER
+}
+
+entity "sessions" {
+    * id : INTEGER [PK]
+    --
+    * trainer_id : INTEGER [FK -> users]
+    * resource_id : INTEGER [FK -> resources]
+    * name : TEXT
+    * date : DATE
+    * start_time : TEXT
+    * end_time : TEXT
+}
+
+entity "bookings" {
+    * id : INTEGER [PK]
+    --
+    * session_id : INTEGER [FK -> sessions]
+    * user_id : INTEGER [FK -> users]
+    created_at : DATETIME
+}
+
+entity "trainer_schedules" {
+    * id : INTEGER [PK]
+    --
+    * trainer_id : INTEGER [FK -> users]
+    * day_of_week : INTEGER
+    * start_time : TEXT
+    * end_time : TEXT
+}
+
+entity "equipment" {
+    * id : INTEGER [PK]
+    --
+    * name : TEXT
+    * serial_number : TEXT [Unique]
+    * status : TEXT
+    resource_id : INTEGER [FK -> resources]
+}
+
+users ||..o| subscriptions
+users ||..o{ sessions
+users ||..o{ bookings
+users ||..o{ trainer_schedules
+resources ||..o{ sessions
+sessions ||..o{ bookings
+resources ||..o{ equipment
+@enduml

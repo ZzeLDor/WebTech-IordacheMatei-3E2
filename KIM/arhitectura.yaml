@@ -1,0 +1,151 @@
+# Manifestul Arhitectural al aplicatiei KIM Web Manager
+# Document de referinta pentru evaluarea academica
+
+proiect:
+  nume: KIM Web Manager
+  tip: Aplicatie Web de Gestiune a Activitatilor Sportive si Recuperare Medicala
+  paradigma: MVC (Model-View-Controller) simplificat pentru scop didactic
+  tehnologii:
+    frontend: HTML5, CSS3 (Vanilla), JavaScript (Vanilla, AJAX cu Fetch API)
+    backend: PHP 8.x (Vanilla Core, Autoloader propriu)
+    baza_de_date: SQLite 3 (interogare prin PDO)
+    notificari: Protocol SMTP (conexiune directa prin socket-uri TCP)
+
+structura_directoare:
+  core:
+    descriere: Componentele de baza ale platformei (infrastructura core)
+    fisiere:
+      - Database.php: Implementeaza conexiunea la baza de date SQLite folosind sablonul Singleton si Prepared Statements.
+      - Router.php: Ruteaza cererile HTTP primite la controller-ul si metoda corespunzatoare, decupland URL-urile de fisierele fizice.
+      - Mailer.php: Serviciu de e-mail ce comunica low-level prin socket-uri TCP directe cu un server SMTP pentru notificari dinamice.
+  controllers:
+    descriere: Logica de business a aplicatiei si punctele de acces API (JSON/HTML)
+    fisiere:
+      - AuthController.php: Gestioneaza autentificarea securizata, inregistrarea membrilor si deconectarea din sistem.
+      - UserController.php: Permite administratorilor gestionarea utilizatorilor si alocarea rolurilor (membru, antrenor, kinetoterapeut, admin).
+      - SessionController.php: Gestioneaza programarile (sedinte de grup), rezervarile membrilor, regulile de suprapunere in sali si validarea abonamentelor.
+      - PrivateRequestController.php: Administreaza cererile de sedinte private si fluxul de aprobare/respingere cu notificari pe e-mail.
+      - ResourceController.php: Administreaza resursele fizice (sali de sport si echipamente) si importul in masa al antrenorilor prin CSV/XML.
+      - SubscriptionController.php: Gestioneaza abonamentele membrilor, categoriile de acces si suspendarea automata a abonamentelor expirate.
+      - ProfileController.php: Gestioneaza profilul personal, preferintele si programul de disponibilitate al antrenorilor.
+      - StatsController.php: Calculeaza statistici avansate pentru dashboard-ul administrativ si genereaza rapoarte de export CSV si XML.
+      - ExportController.php: Gestioneaza formatele si functionalitatea de export direct a datelor.
+  public:
+    descriere: Punctul de intrare public al aplicatiei
+    fisiere:
+      - index.php: Front Controller-ul care initiaza autoloader-ul si porneste router-ul.
+      - scholarly.html: Documentatia tehnica in format Scholarly HTML conform standardelor academice.
+      - css/: Fisierele de stilizare cu design premium si minimalist (culori HSL, aspect modern).
+      - js/: Logica de interactiune asincrona si apelurile catre API-ul backend.
+
+baza_de_date:
+  tip: SQLite 3 (kim.sqlite)
+  structura_tabele:
+    users:
+      descriere: Toti utilizatorii inregistrati in sistem (membri si personalul staff)
+      coloane:
+        id: INTEGER PRIMARY KEY AUTOINCREMENT
+        name: TEXT NOT NULL (Numele complet)
+        email: TEXT UNIQUE NOT NULL (Adresa de e-mail, folosita ca login)
+        password_hash: TEXT NOT NULL (Parola securizata prin Bcrypt)
+        role: TEXT NOT NULL (membru, admin, trainer, kineto)
+        specialization: TEXT (Specializarea antrenorului/kinetoterapeutului)
+        created_at: DATETIME DEFAULT CURRENT_TIMESTAMP
+    subscriptions:
+      descriere: Abonamentele active sau expirate ale membrilor
+      coloane:
+        id: INTEGER PRIMARY KEY AUTOINCREMENT
+        user_id: INTEGER REFERENCES users(id)
+        type: TEXT NOT NULL (basic, premium, medical)
+        status: TEXT NOT NULL (active, suspended, expired)
+        end_date: DATE NOT NULL
+    resources:
+      descriere: Locatiile fizice unde se desfasoara sedintele (sali de sport sau cabinete)
+      coloane:
+        id: INTEGER PRIMARY KEY AUTOINCREMENT
+        name: TEXT NOT NULL (Numele salii)
+        type: TEXT NOT NULL (fitness, kineto, aerobic, general)
+        capacity: INTEGER NOT NULL (Numarul maxim de persoane permise)
+    sessions:
+      descriere: Sedintele de grup sau sedintele private programate in calendar
+      coloane:
+        id: INTEGER PRIMARY KEY AUTOINCREMENT
+        title: TEXT NOT NULL
+        category: TEXT NOT NULL (fitness, kineto, aerobic)
+        trainer_id: INTEGER REFERENCES users(id)
+        resource_id: INTEGER REFERENCES resources(id)
+        start_time: DATETIME NOT NULL
+        end_time: DATETIME NOT NULL
+        is_private: INTEGER DEFAULT 0 (Flag: 0 = public/grup, 1 = sedinta privata)
+        client_id: INTEGER REFERENCES users(id) NULL
+    bookings:
+      descriere: Inregistrarile/rezervarile membrilor la sedintele publice
+      coloane:
+        id: INTEGER PRIMARY KEY AUTOINCREMENT
+        session_id: INTEGER REFERENCES sessions(id)
+        user_id: INTEGER REFERENCES users(id)
+        created_at: DATETIME DEFAULT CURRENT_TIMESTAMP
+    trainer_schedules:
+      descriere: Zilele si intervalele de timp in care antrenorii sunt disponibili
+      coloane:
+        id: INTEGER PRIMARY KEY AUTOINCREMENT
+        trainer_id: INTEGER REFERENCES users(id)
+        day_of_week: INTEGER NOT NULL (0 = Duminica, 1 = Luni, etc.)
+        start_time: TEXT NOT NULL
+        end_time: TEXT NOT NULL
+    equipment:
+      descriere: Echipamentele din dotarea salilor, urmarite administrativ
+      coloane:
+        id: INTEGER PRIMARY KEY AUTOINCREMENT
+        name: TEXT NOT NULL
+        serial_number: TEXT UNIQUE NOT NULL
+        status: TEXT NOT NULL (functional, defect, mentenanta)
+        resource_id: INTEGER REFERENCES resources(id) NULL
+    private_requests:
+      descriere: Solicitarile trimise de membri pentru sedinte individuale de antrenament sau terapie
+      coloane:
+        id: INTEGER PRIMARY KEY AUTOINCREMENT
+        user_id: INTEGER REFERENCES users(id) (Membru solicitant)
+        trainer_id: INTEGER REFERENCES users(id) (Specialistul solicitat)
+        title: TEXT NOT NULL
+        category: TEXT NOT NULL
+        date: DATE NOT NULL
+        start_time: TEXT NOT NULL
+        end_time: TEXT NOT NULL
+        status: TEXT NOT NULL (pending, approved, denied)
+        created_at: DATETIME DEFAULT CURRENT_TIMESTAMP
+
+securitate_si_protectie:
+  sql_injection:
+    metoda: Utilizarea exclusiva a obiectului PDO cu Prepared Statements pentru orice citire sau scriere.
+    detalii: Valorile dinamice nu sunt niciodata concatenate direct in string-urile SQL. Parametrii sunt legati prin bindValue() sau trimisi direct in execute().
+  xss_cross_site_scripting:
+    metoda: Filtrarea string-urilor inainte de afisarea lor in interfata sau exportarea lor.
+    detalii: Folosirea functiei native htmlspecialchars() cu parametrii ENT_QUOTES si UTF-8 la randarea datelor dinamice trimise in format JSON sau HTML.
+  securitate_parole:
+    metoda: Encodare asimetrica unidirectionala.
+    detalii: Parolele sunt hashuite prin password_hash($password, PASSWORD_BCRYPT) in AuthController si verificate cu password_verify() la login.
+  verificare_sesiune:
+    metoda: Verificare robusta de stare.
+    detalii: Fiecare API verifica existenta unei sesiuni active ($_SESSION['user_id']) si valideaza ca rolul utilizatorului are privilegiile necesare (Role-Based Access Control).
+
+fluxuri_principale:
+  autentificare:
+    - Utilizatorul trimite e-mail-ul si parola.
+    - AuthController verifica credentialele prin password_verify.
+    - Daca sunt valide, se stocheaza in $_SESSION informatiile utilizatorului (id, name, email, role).
+  rezervare_sedinta_grup:
+    - Membrul alege o sedinta publica din calendar.
+    - SessionController valideaza ca abonamentul membrului este activ si corespunde categoriei sedintei (basic -> fitness, premium -> aerobic/fitness, medical -> kineto).
+    - Se verifica daca sedinta are locuri libere (bookings.count < resources.capacity).
+    - Daca totul este in regula, se face insert in bookings si se trimite e-mail de confirmare prin Mailer.
+  creare_sedinta_grup:
+    - Administratorul sau antrenorul propune o sedinta.
+    - SessionController verifica daca antrenorul nu este ocupat in acel interval.
+    - Se verifica daca sala aleasa nu este ocupata (cu exceptia Salii Principale - ID 1, care este multi-use si permite suprapuneri).
+    - Se creeaza sedinta in tabela sessions.
+  cerere_sedinta_privata:
+    - Membrul trimite o cerere cu specialistul dorit, data si intervalul orar.
+    - PrivateRequestController salveaza cererea cu status 'pending'.
+    - Specialistul primeste o notificare sau vede cererea in propriul panou de control.
+    - La aprobare, statusul devine 'approved', se adauga automat sedinta de tip privat in tabela sessions pentru acel antrenor si membru, iar aplicatia trimite e-mail-ul de confirmare a programarii.

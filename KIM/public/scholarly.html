@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="ro">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Specificatia Cerintelor de Sistem pentru KIM Web Manager in format Scholarly HTML conform standardului IEEE Std 830-1998.">
+    <title>KIM Web Manager - Specificatia Cerintelor de Sistem| Scholarly HTML</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400&family=Roboto+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            font-weight: 300;
+            line-height: 1.6;
+            color: #333;
+            background-color: #fff;
+            max-width: 21cm;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        article {
+            background: transparent;
+            border: none;
+            box-shadow: none;
+            padding: 0;
+        }
+
+        /* Banner styling following W3C Scholarly spec */
+        div.banner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 15px;
+            margin-bottom: 40px;
+        }
+
+        div.banner a {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        div.banner .scholarly-logo {
+            font-weight: 700;
+            font-size: 1.6rem;
+            color: #4b0061;
+            letter-spacing: 0.05em;
+        }
+
+        div.banner .scholarly-logo span {
+            color: #9400bf;
+            font-weight: 300;
+        }
+
+        div.banner div.status {
+            color: #fff;
+            background: #9400bf;
+            padding: 8px 16px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            text-align: right;
+            border-radius: 2px;
+        }
+
+        /* W3C violet-colored headers */
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            color: #4b0061;
+            font-family: 'Roboto', sans-serif;
+            font-weight: 400;
+            letter-spacing: .0375em;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.8em;
+            font-weight: 400;
+            line-height: 1.2;
+            color: #4b0061;
+            text-align: left;
+        }
+
+        header h2 {
+            font-size: 1.3em;
+            color: #555;
+            font-weight: 300;
+            margin-top: 10px;
+            margin-bottom: 25px;
+            border-bottom: none;
+            padding-bottom: 0;
+            text-align: left;
+        }
+
+        h2.sec-title {
+            font-size: 1.8rem;
+            margin-top: 3em;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 6px;
+        }
+
+        h3.sec-subtitle {
+            font-size: 1.25rem;
+            margin-top: 2.5em;
+            margin-bottom: 0.8rem;
+            font-weight: 400;
+            color: #4b0061;
+        }
+
+        p {
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        /* Table of Contents */
+        .toc-box {
+            background-color: #faf8fc;
+            border: 1px solid #e1d5eb;
+            padding: 25px;
+            border-radius: 4px;
+            margin-bottom: 40px;
+        }
+
+        .toc-title {
+            font-weight: 700;
+            font-size: 1.15rem;
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: #4b0061;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .toc-list,
+        .toc-sublist {
+            list-style-type: none;
+            padding-left: 0;
+            margin: 0;
+        }
+
+        .toc-list>li {
+            margin-bottom: 10px;
+        }
+
+        .toc-list a {
+            color: #4b0061;
+            text-decoration: none;
+            font-weight: 400;
+        }
+
+        .toc-list a:hover {
+            color: #9400bf;
+            text-decoration: underline;
+        }
+
+        .toc-sublist {
+            padding-left: 20px;
+            margin-top: 5px;
+        }
+
+        .toc-sublist li {
+            margin-bottom: 4px;
+            font-size: 0.95rem;
+        }
+
+        .toc-sublist a {
+            color: #555;
+        }
+
+        /* Meta details */
+        .meta-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 25px 0;
+            padding: 15px 20px;
+            background-color: #fcfbfe;
+            border-left: 4px solid #4b0061;
+            border-radius: 4px;
+            font-size: 0.95rem;
+        }
+
+        .meta-item strong {
+            color: #4b0061;
+            font-weight: 500;
+        }
+
+        /* Lists, links, tables, code */
+        a {
+            color: #9400bf;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        ul,
+        ol {
+            margin-top: 0;
+            margin-bottom: 20px;
+            padding-left: 25px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        code,
+        pre {
+            font-family: 'Roboto Mono', monospace;
+        }
+
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-size: 0.9em;
+            color: #434343;
+        }
+
+        pre {
+            display: block;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+
+        pre code {
+            padding: 0;
+            background-color: transparent;
+            font-size: 0.9em;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 0.95rem;
+        }
+
+        table th,
+        table td {
+            border: 1px solid #ddd;
+            padding: 10px 12px;
+            text-align: left;
+        }
+
+        table th {
+            background-color: #fcfbfe;
+            color: #4b0061;
+            font-weight: 500;
+        }
+
+        table tr:nth-child(even) {
+            background-color: #faf8fc;
+        }
+
+        /* Notes */
+        .info-note {
+            background-color: #faf8fc;
+            border-left: 4px solid #9400bf;
+            padding: 15px 20px;
+            border-radius: 4px;
+            margin: 25px 0;
+            font-size: 0.95rem;
+        }
+
+        .info-note p:last-child {
+            margin-bottom: 0;
+        }
+
+        @media screen and (max-width: 980px) {
+            body {
+                margin: 0 1.5rem;
+                padding: 1.5rem 0;
+            }
+
+            header h1 {
+                font-size: 2.2em;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <article>
+        <header>
+
+            <h1 property="schema:name">Specificatia Cerintelor de Sistem (SRS)</h1>
+            <h2>Aplicatie pentru Gestiunea Activitatilor Kinetoterapeutice si de Fitness (KIM Web Manager)</h2>
+
+            <div class="meta-container">
+                <div class="meta-item" typeof="schema:Person" property="schema:author">
+                    <strong>Autor:</strong> <span property="schema:givenName">Matei</span> <span
+                        property="schema:familyName">Iordache</span>
+                </div>
+                <div class="meta-item">
+                    <strong>Format:</strong> Scholarly HTML
+                </div>
+                <div class="meta-item">
+                    <strong>Versiune:</strong> 1.0
+                </div>
+            </div>
+        </header>
+
+        <!-- CUPRINS (TOC) -->
+        <div class="toc-box" role="doc-toc">
+            <div class="toc-title">Cuprins</div>
+            <ul class="toc-list">
+                <li><a href="#introducere">1. Introducere</a>
+                    <ul class="toc-sublist">
+                        <li><a href="#scop">1.1 Scopul Documentului</a></li>
+                        <li><a href="#conventii">1.2 Conventii de Documentare</a></li>
+                        <li><a href="#public">1.3 Publicul Tinta si Sugestii</a></li>
+                        <li><a href="#prezentare">1.4 Prezentarea Generala a Sistemului</a></li>
+                    </ul>
+                </li>
+                <li><a href="#descriere-generala">2. Descriere Generala</a>
+                    <ul class="toc-sublist">
+                        <li><a href="#perspectiva">2.1 Perspectiva Produsului</a></li>
+                        <li><a href="#functiile">2.2 Functiile Sistemului</a></li>
+                        <li><a href="#clase-utilizatori">2.3 Clase de Utilizatori si Caracteristici</a></li>
+                        <li><a href="#mediu-operare">2.4 Mediul de Operare</a></li>
+                        <li><a href="#constrangeri">2.5 Constrangeri de Design si Implementare</a></li>
+                        <li><a href="#dependinte">2.6 Dependente si Ipoteze</a></li>
+                    </ul>
+                </li>
+                <li><a href="#cerinte-functionale">3. Cerinte Functionale Esentiale</a>
+                    <ul class="toc-sublist">
+                        <li><a href="#auth-reg">3.1 Inregistrare si Autentificare Securizata</a></li>
+                        <li><a href="#sub-management">3.2 Validarea Automata a Abonamentelor</a></li>
+                        <li><a href="#booking-calendar">3.3 Orar Saptamanal Interactiv si Inscrieri</a></li>
+                        <li><a href="#overlap-rules">3.4 Reguli de Evitare a Suprapunerilor (Sala Principala vs.
+                                Cabinete)</a></li>
+                        <li><a href="#private-requests">3.5 Gestionarea Cererilor Private si Notificari Mail</a></li>
+                        <li><a href="#admin-stats">3.6 Panou Administrativ Complex si Export Date</a></li>
+                    </ul>
+                </li>
+                <li><a href="#interfata-utilizator">4. Cerinte de Interfata Externa</a></li>
+                <li><a href="#cerinte-nefunctionale">5. Cerinte Nefunctionale (Calitati ale Sistemului)</a></li>
+                <li><a href="#bibliografie">6. Bibliografie & Referinte</a></li>
+            </ul>
+        </div>
+
+        <!-- SECTIUNEA 1: INTRODUCERE -->
+        <section id="introducere">
+            <h2 class="sec-title">1. Introducere</h2>
+
+            <h3 id="scop" class="sec-subtitle">1.1 Scopul Documentului</h3>
+            <p>
+                Acest document detaliaza Specificatia Cerintelor de Sistem (SRS) pentru aplicatia **KIM Web Manager**.
+                Documentul stabileste cerintele functionale, de performanta, interfata si securitate care ghideaza
+                dezvoltarea
+                aplicatiei dedicate gestiunii activitatilor sportive si de recuperare medicala (kinetoterapie).
+            </p>
+
+            <h3 id="conventii" class="sec-subtitle">1.2 Conventii de Documentare</h3>
+            <p>
+                Acest document respecta structura standard oferita de **IEEE Std 830-1998** pentru descrierea cerintelor
+                software.
+                Cerintele prioritare sunt marcate ca **Esentiale**, iar termenii tehnici folositi respecta arhitectura
+                MVC implementata.
+            </p>
+
+            <h3 id="public" class="sec-subtitle">1.3 Publicul Tinta si Sugestii</h3>
+            <p>
+                Documentul se adreseaza evaluatorilor academici ai proiectului, echipei de dezvoltare frontend/backend
+                si
+                administratorilor de sistem care doresc sa inteleaga fluxul de rezervari si integrarea API din KIM.
+            </p>
+
+            <h3 id="prezentare" class="sec-subtitle">1.4 Prezentarea Generala a Sistemului</h3>
+            <p>
+                **KIM Web Manager** este un sistem web modular ce faciliteaza programarea sedintelor de fitness si
+                kinetoterapie,
+                coordonarea echipei de specialisti (antrenori si terapeuti), urmarirea gradului de ocupare a salilor
+                (resurselor)
+                si validarea automata a tipurilor de abonamente pentru clienti. Comunicarea se face complet asincron,
+                prin AJAX Fetch API.
+            </p>
+        </section>
+
+        <!-- SECTIUNEA 2: DESCRIERE GENERALA -->
+        <section id="descriere-generala">
+            <h2 class="sec-title">2. Descriere Generala</h2>
+
+            <h3 id="perspectiva" class="sec-subtitle">2.1 Perspectiva Produsului</h3>
+            <p>
+                Sistemul functioneaza independent ca o platforma de gestiune interna a unei clinici de
+                kinetoterapie/sali de fitness.
+                Este organizat pe un model arhitectural MVC personalizat, scris in PHP nativ, cu stocare pe SQLite
+                pentru simplitate
+                si portabilitate maxima in mediul universitar.
+            </p>
+
+            <h3 id="functiile" class="sec-subtitle">2.2 Functiile Sistemului</h3>
+            <p>
+                Aplicatia furnizeaza servicii asincrone pentru urmatoarele fluxuri operationale majore:
+            </p>
+            <ul>
+                <li>Autentificare si inregistrare diferentiata pe baza de roluri.</li>
+                <li>Gestiunea orelor saptamanale de grup si individuale (Timetable).</li>
+                <li>Flux de cereri private de la clienti la terapeuti/antrenori (cu notificare prin e-mail).</li>
+                <li>Alocarea echipamentelor pe sali si raportarea starii acestora.</li>
+                <li>Dashboard de analiza manageriala cu grafice evolutive si descarcari in format CSV si XML.</li>
+            </ul>
+
+            <h3 id="clase-utilizatori" class="sec-subtitle">2.3 Clase de Utilizatori si Caracteristici</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Rol Utilizator</th>
+                        <th>Nivel Acces</th>
+                        <th>Drepturi Principale</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Membru</strong></td>
+                        <td>Scazut</td>
+                        <td>Vizualizare calendar, rezervare sedinte de grup permise de abonament, trimitere cereri
+                            antrenamente private.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Antrenor / Kinetoterapeut</strong></td>
+                        <td>Mediu</td>
+                        <td>Editare orar propriu, programare sedinte de grup, aprobare/respingere cereri private primite
+                            de la clienti.</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Administrator</strong></td>
+                        <td>Maxim</td>
+                        <td>Modificare roluri/specializari, alocare echipamente, configurare sali, acces complet la
+                            statistici si export CSV/XML.</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3 id="mediu-operare" class="sec-subtitle">2.4 Mediul de Operare</h3>
+            <p>
+                Aplicatia ruleaza pe orice server web compatibil cu PHP (PHP 7.4 - 8.x) cu extensia `pdo_sqlite`
+                activata.
+                Interfata de utilizator este complet compatibila cu navigatoarele moderne (Chrome, Firefox, Edge,
+                Safari),
+                necesitand suport nativ pentru standardul ES6 Javascript.
+            </p>
+
+            <h3 id="constrangeri" class="sec-subtitle">2.5 Constrangeri de Design si Implementare</h3>
+            <p>
+                Pentru a asigura o curatenie absoluta a structurii academice si conform solicitarii clientului,
+                <strong>codul sursa a fost curatat complet de comentarii inline</strong> in toate fisierele PHP, JS, CSS
+                si SQL.
+                Interfata foloseste exclusiv componente CSS native, fara biblioteci sau framework-uri externe (precum
+                TailwindCSS).
+            </p>
+
+            <h3 id="dependinte" class="sec-subtitle">2.6 Dependente si Ipoteze</h3>
+            <p>
+                Sistemul presupune existenta unei conexiuni functionale la internet pentru incarcarea setului de fonturi
+                (Google Fonts)
+                si a bibliotecii de diagrame/statistici (Chart.js), precum si pentru serviciul de expediere a
+                notificarilor SMTP.
+            </p>
+        </section>
+
+        <!-- SECTIUNEA 3: CERINTE FUNCTIONALE -->
+        <section id="cerinte-functionale">
+            <h2 class="sec-title">3. Cerinte Functionale Esentiale</h2>
+
+            <h3 id="auth-reg" class="sec-subtitle">3.1 Inregistrare si Autentificare Securizata</h3>
+            <p>
+                Sistemul trebuie sa permita utilizatorilor crearea unui cont prin furnizarea numelui, e-mailului unic si
+                a parolei.
+                Parola este hash-uita prin algoritmul BCRYPT. Controlul accesului este asigurat prin sesiuni backend
+                securizate.
+            </p>
+
+            <h3 id="sub-management" class="sec-subtitle">3.2 Validarea Automata a Abonamentelor</h3>
+            <div class="info-note">
+                <p><strong>Regula de afaceri cruciala:</strong> Un membru poate rezerva o sedinta doar daca are un
+                    abonament **activ** (neexpirat) si care este compatibil cu specificul activitatii dorite.</p>
+            </div>
+            <p>
+                Daca o sedinta este de categoria *Kinetoterapie*, utilizatorul trebuie sa aiba un abonament de tip
+                `kineto`, `mixed`, `medical` sau `premium`.
+                Pentru sedintele de tip *Forta*, este necesar un abonament `forta`, `strength`, `mixed`, `premium` sau
+                `general`.
+                Validarea are loc pe backend, in controllerul `SessionController.php` prin metoda `canBookCategory()`.
+            </p>
+
+            <h3 id="booking-calendar" class="sec-subtitle">3.3 Orar Saptamanal Interactiv si Inscrieri</h3>
+            <p>
+                Platforma ofera o vizualizare interactiva de tip grila calendaristica (Timetable). Membrii se pot
+                inscrie
+                printr-un singur click pe sedintele de grup active, cu conditia ca limita de capacitate maxima a salii
+                sa nu fie atinsa.
+                Inscrierea salveaza automat o inregistrare in tabelul `bookings`.
+            </p>
+
+            <h3 id="overlap-rules" class="sec-subtitle">3.4 Reguli de Evitare a Suprapunerilor (Sala Principala vs.
+                Cabinete)</h3>
+            <p>
+                La crearea sau editarea unei sedinte in calendar, sistemul face verificari asincrone pentru a evita
+                suprapunerile de timp.
+                Regula de validare respecta urmatoarea specificitate:
+            </p>
+            <ul>
+                <li><strong>Salile normale (ID diferit de 1)</strong>: Au utilizare exclusiva. Nu pot fi ocupate de doua
+                    sedinte diferite in acelasi interval de timp.</li>
+                <li><strong>Sala Principala (ID 1)</strong>: Permite programari concurente din partea diferitilor
+                    antrenori (suprapunerea fiind considerata valida deoarece spatiul este proiectat pentru utilizare
+                    colectiva).</li>
+            </ul>
+
+            <h3 id="private-requests" class="sec-subtitle">3.5 Gestionarea Cererilor Private si Notificari Mail</h3>
+            <p>
+                Utilizatorii pot trimite cereri directe de antrenament privat sau terapie catre anumiti specialisti din
+                echipa.
+                La initierea unei cereri, specialistul primeste o notificare prin e-mail realizata prin serviciul
+                `Core\Mailer`.
+                Specialistul are dreptul sa aprobe sau sa respinga cererea. Aprobarea converteste automat cererea intr-o
+                sedinta
+                de tip `(Privat)` in baza de date.
+            </p>
+            <p>
+                De asemenea, `Core\Mailer` este utilizat si in cadrul `SessionController` pentru a expedia e-mailuri
+                automate de confirmare
+                la rezervarea unei sedinte de catre membru, respectiv de notificare in cazul in care o sedinta este
+                anulata de catre administrator
+                sau de catre antrenor.
+            </p>
+
+            <h3 id="admin-stats" class="sec-subtitle">3.6 Panou Administrativ Complex si Export Date</h3>
+            <p>
+                Administratorul dispune de un dashboard cu vizualizari dinamice alimentate asincron pentru monitorizarea
+                performantei.
+                Graficele pot fi salvate ca imagini (`PNG`/`WebP`).
+                De asemenea, sistemul exporta rapoarte statistice in formatele structurate standard solicitate in mediul
+                academic:
+            </p>
+            <ul>
+                <li><strong>Export CSV</strong>: Date tabelare simplificate, usor importabile in foi de calcul.</li>
+                <li><strong>Export XML</strong>: Structura arborescenta ierarhizata a rapoartelor pentru
+                    interoperabilitate ridicata.</li>
+            </ul>
+        </section>
+
+        <!-- SECTIUNEA 4: INTERFATA UTILIZATOR -->
+        <section id="interfata-utilizator">
+            <h2 class="sec-title">4. Cerinte de Interfata Externa</h2>
+            <p>
+                Interfata de interactiune cu utilizatorul foloseste concepte moderne de design, cum ar fi:
+            </p>
+            <ul>
+                <li><strong>Design Responsiv</strong>: Adaptabilitate pe dispozitive mobile prin media-queries in
+                    `style.css`.</li>
+                <li><strong>Sistem de Toast-uri asincrone</strong>: Notificari dinamice pe ecran (succes, eroare,
+                    atentionare) pentru feedback instant, fara a reincarca pagina.</li>
+                <li><strong>Design Premium</strong>: Utilizarea fontului Outfit de la Google Fonts, palette de culori
+                    elegante bazate pe albastru regal si elemente vizuale atractive.</li>
+            </ul>
+        </section>
+
+        <!-- SECTIUNEA 5: CERINTE NEFUNCTIONALE -->
+        <section id="cerinte-nefunctionale">
+            <h2 class="sec-title">5. Cerinte Nefunctionale (Calitati ale Sistemului)</h2>
+            <ul>
+                <li><strong>Securitate si Prevenire Atacuri</strong>: Parole securizate prin BCRYPT, validari de rol la
+                    nivel de controller, prevenirea SQL Injection prin PDO si protectie XSS
+                    prin <code>htmlspecialchars()</code> la afisare.</li>
+                <li><strong>Performanta</strong>: Timp de raspuns al API-ului sub 150ms datorita optimizarii
+                    interogarilor SQLite si stocarii locale.</li>
+                <li><strong>Portabilitate</strong>: Aplicatia functioneaza perfect indiferent de platforma de operare
+                    (Windows, Linux, macOS) atat timp cat PHP este disponibil.</li>
+                <li><strong>Robustete</strong>: Prinderea corecta a erorilor de baza de date cu returnarea de mesaje de
+                    eroare intuitive in format JSON (`{status: "eroare", eroare: "detaliu"}`).</li>
+            </ul>
+        </section>
+
+        <!-- SECTIUNEA 6: BIBLIOGRAFIE -->
+        <section id="bibliografie" role="doc-bibliography">
+            <h2 class="sec-title">6. Bibliografie & Referinte</h2>
+            <ol>
+                <li><strong>IEEE Std 830-1998</strong>: <i>IEEE Recommended Practice for Software Requirements
+                        Specifications</i>, IEEE Computer Society.</li>
+                <li><strong>W3C Scholarly HTML Specification</strong>: <a href="https://w3c.github.io/scholarly-html/"
+                        target="_blank">w3c.github.io/scholarly-html</a>.
+                </li>
+                <li><strong>SQLite Database Documentation</strong>: <a href="https://www.sqlite.org/docs.html"
+                        target="_blank">sqlite.org/docs.html</a>.</li>
+                <li><strong>PHP Manual</strong>: Referinte despre PDO, Password Hashing si gestionarea sesiunilor.</li>
+            </ol>
+        </section>
+    </article>
+
+</body>
+
+</html>
